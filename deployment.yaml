@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ping-monitor
+  namespace: default
+  labels:
+    app: ping-monitor
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: ping-monitor
+  template:
+    metadata:
+      labels:
+        app: ping-monitor
+    spec:
+      imagePullSecrets:
+        - name: dockerhub-creds
+      containers:
+        - name: ping-monitor
+          image: xmondo/melondust:ping-monitor
+          imagePullPolicy: Always
+          workingDir: /etc/ping-monitor
+          ports:
+            - containerPort: 8089
+              name: https
+          volumeMounts:
+            - name: config
+              mountPath: /etc/ping-monitor/config.json
+              subPath: config.json
+              readOnly: true
+            - name: tls
+              mountPath: /etc/ping-monitor/cert.pem
+              subPath: cert.pem
+              readOnly: true
+            - name: tls
+              mountPath: /etc/ping-monitor/key.pem
+              subPath: key.pem
+              readOnly: true
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+      volumes:
+        - name: config
+          secret:
+            secretName: ping-monitor-config
+        - name: tls
+          secret:
+            secretName: ping-monitor-tls
