@@ -17,11 +17,9 @@ spec:
       labels:
         app: ping-monitor
     spec:
-      imagePullSecrets:
-        - name: regcred
       containers:
         - name: ping-monitor
-          image: xmondo/melondust:ping-monitor
+          image: xlabs.xmondo.com:31005/xmondo/melondust:ping-monitor
           imagePullPolicy: Always
           workingDir: /etc/ping-monitor
           ports:
