@@ -12,3 +12,4 @@ spec:
       targetPort: 8089
       nodePort: 30089
   type: NodePort
+  externalTrafficPolicy: Local
