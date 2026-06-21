@@ -8,8 +8,8 @@ spec:
     app: ping-monitor
   ports:
     - name: https
-      port: 8089
+      port: 443
       targetPort: 8089
-      nodePort: 30089
-  type: NodePort
-  externalTrafficPolicy: Local
+  type: LoadBalancer
+  loadBalancerSourceRanges:
+    - 184.60.25.132/32
